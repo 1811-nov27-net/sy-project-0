@@ -48,3 +48,7 @@ CREATE TABLE Pizza.Inventory
 	Stock INT NULL,
 	Price MONEY
 );
+
+GO
+
+-- input basic data here
