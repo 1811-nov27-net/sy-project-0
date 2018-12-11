@@ -14,7 +14,6 @@ DROP TABLE Pizza.Store;
 DROP TABLE Pizza.Inventory;
 GO
 
-DROP TABLE Pizza.Users;
 CREATE TABLE Pizza.Users
 (
 	Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -22,23 +21,18 @@ CREATE TABLE Pizza.Users
 	LastName NVARCHAR(100) NOT NULL
 );
 
--- need to change, as one transaction can have a max of 12 pizzas
-DROP TABLE Pizza.Transactions;
--- this method, (PizzaId) allows for multiple pizza id's for the same OrderId
-CREATE TABLE Pizza.Transactions
+-- Inventory needs to be reworked
+CREATE TABLE Pizza.Inventory
 (
-	OrderId INT IDENTITY(10,10) NOT NULL, -- we don't want it to be unique since each OrderId will have different PizzaId's
-	PizzaId INT NOT NULL FOREIGN KEY REFERENCES Pizza.TransactionOrder(Id),
-	UserId INT NOT NULL FOREIGN KEY REFERENCES Pizza.Users(Id),
-	StoreId INT NOT NULL FOREIGN KEY REFERENCES Pizza.Store(StoreId),
-	OrderTime datetime2 NOT NULL
+	-- no numerical ID since each ingredient is unique in itself
+	IngredientName NVARCHAR(100) NOT NULL PRIMARY KEY, -- '' (empty) represents no topping, has 0 cost
+	Price Money
 );
 
 -- need to change to accommodate pizza order (maybe)
-DROP TABLE Pizza.TransactionOrder;
 CREATE TABLE Pizza.TransactionOrder
 (
-	Id INT IDENTITY(10,10) NOT NULL PRIMARY KEY,
+	PizzaId INT IDENTITY(10,10) NOT NULL PRIMARY KEY,
 	Size NVARCHAR(50) NOT NULL,
 	Topping1 NVARCHAR(100) NOT NULL FOREIGN KEY REFERENCES Pizza.Inventory(IngredientName),
 	Topping2 NVARCHAR(100) NOT NULL FOREIGN KEY REFERENCES Pizza.Inventory(IngredientName),
@@ -49,26 +43,27 @@ CREATE TABLE Pizza.TransactionOrder
 );
 
 -- Store possibly needs to be reworked with Inventory
-DROP TABLE Pizza.Store;
 -- using this one, Inventory needs to be reworked so that ingredients and prices are unique
 -- predefined total stock of items in store, decreases no matter what kind of ingredient
 CREATE TABLE Pizza.Store
 (
 	--StoreId INT IDENTITY(100,100) NOT NULL PRIMARY KEY, -- we don't even need this, the name should be unique and serve as the primary key
-	OrderId INT NOT NULL FOREIGN KEY REFERENCES Pizza.TransactionOrder(Id),
-	Name NVARCHAR(100) NOT NULL,
+	Name NVARCHAR(100) NOT NULL PRIMARY KEY,
+	OrderId INT NULL FOREIGN KEY REFERENCES Pizza.TransactionOrder(PizzaId), -- set to NULL so we can declare a store with no orders
 	-- InventoryId INT IDENTITY(100,100) NOT NULL FOREIGN KEY REFERENCES Pizza.Inventory(Id), -- not even necessary since Inventory only supplies 
 	-- ingredient name and price
 	Stock INT NULL
 );
 
--- Inventory needs to be reworked
-DROP TABLE Pizza.Inventory;
-CREATE TABLE Pizza.Inventory
+-- need to change, as one transaction can have a max of 12 pizzas
+-- this method, (PizzaId) allows for multiple pizza id's for the same OrderId
+CREATE TABLE Pizza.Transactions
 (
-	-- no numerical ID since each ingredient is unique in itself
-	IngredientName NVARCHAR(100) NOT NULL PRIMARY KEY, -- '' (empty) represents no topping, has 0 cost
-	Price Money
+	OrderId INT IDENTITY(10,10) NOT NULL, -- we don't want it to be unique since each OrderId will have different PizzaId's
+	PizzaId INT NOT NULL FOREIGN KEY REFERENCES Pizza.TransactionOrder(PizzaId),
+	UserId INT NOT NULL FOREIGN KEY REFERENCES Pizza.Users(Id),
+	StoreName NVARCHAR(100) NOT NULL FOREIGN KEY REFERENCES Pizza.Store(Name),
+	OrderTime datetime2 NOT NULL
 );
 
 GO
@@ -83,28 +78,35 @@ SELECT * FROM Pizza.Users;
 
 -- NEEDS TO BE REDONE, EACH INGREDIENT HAS A UNIQUE ID ********************************************************************
 -- create an inventory for a pizza store
-INSERT INTO Pizza.Inventory (IngredientName, Stock, Price) VALUES
-	('Pepperoni', 25, 0.50),
-	('Sausage', 25, 0.50),
-	('Chicken', 25, 0.50),
-	('Mushrooms', 25, 0.30),
-	('Black Olives', 25, 0.30),
-	('Jalapenos', 25, 0.30),
-	('Bell Peppers', 25, 0.30),
-	('Onions', 25, 0.30),
-	('Pineapple', 25, 0.30); -- should have ID of 100
+INSERT INTO Pizza.Inventory (IngredientName, Price) VALUES
+	('Pepperoni', 3),
+	('Sausage', 3),
+	('Chicken', 3),
+	('Mushrooms', 2),
+	('Black Olives', 2),
+	('Jalapenos', 2),
+	('Bell Peppers', 2),
+	('Onions', 2),
+	('Pineapple', 1),
+	('Extra Cheese', 4),
+	('',0); -- represents no topping, with 0 cost
 SELECT * FROM Pizza.Inventory;
 
--- create a pizza store
--- Id 100 is Pizza Hut
-INSERT INTO Pizza.Store (Name, InventoryId) VALUES
-	('Pizza Hut', 100); -- has ID of 100
-
 -- create an order
--- sizes are L ($12), M($10), S($8)
+-- sizes are L ($40), M($35), S($30)
+-- why are these pizzas so expensive? because user can order max 12 pizzas, however cost must not exceed $500
+-- "Cost" should be a function that will automatically take the cost of ingredients and add them
 INSERT INTO Pizza.TransactionOrder (Size, Topping1, Topping2, Topping3, Topping4, Topping5, Cost) VALUES
-	('L', 'Pepperoni', 'Mushrooms', 'Black Olives', 'Jalapenos', 'Onions', 13.70); -- has ID of 10
+	('L', 'Pepperoni', 'Mushrooms', 'Black Olives', 'Jalapenos', 'Onions', 51); -- has ID of 10
+SELECT * FROM Pizza.TransactionOrder;
+
+-- create a pizza store
+-- has a total aggregate of 50 ingredients, decreases anytime an ingredient is added
+INSERT INTO Pizza.Store (Name, OrderId, Stock) VALUES
+	('Pizza Hut', 10, 50); -- we put 10 as the ID since we created an order beforehand
+SELECT * FROM Pizza.Store;
 
 -- create a transaction (link between store, user, and pizza transaction order
-INSERT INTO Pizza.Transactions (UserId, StoreId, OrderTime) VALUES
-	(1, 100, GETDATE());
+INSERT INTO Pizza.Transactions (PizzaId, UserId, StoreName, OrderTime) VALUES
+	(10, 1, 'Pizza Hut', GETDATE()); -- pizzaID = 10, userID = 1, store = Pizza Hut, get current date and time
+SELECT * FROM Pizza.Transactions;
