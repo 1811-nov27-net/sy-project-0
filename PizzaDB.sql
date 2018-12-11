@@ -89,7 +89,7 @@ INSERT INTO Pizza.Inventory (IngredientName, Price) VALUES
 	('Onions', 2),
 	('Pineapple', 1),
 	('Extra Cheese', 4),
-	('',0); -- represents no topping, with 0 cost
+	('Nothing',0); -- represents no topping, with 0 cost
 SELECT * FROM Pizza.Inventory;
 
 -- create an order
