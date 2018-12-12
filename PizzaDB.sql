@@ -66,6 +66,9 @@ CREATE TABLE Pizza.Transactions
 	OrderTime datetime2 NOT NULL
 );
 
+ALTER TABLE Pizza.Transactions ADD
+	CONSTRAINT PK_OrderId_ID PRIMARY KEY (OrderId);
+
 GO
 
 -- input basic data here
