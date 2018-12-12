@@ -13,16 +13,15 @@ namespace PizzaStore.Library
     ///     ALL pizza orders must be saved
     /// </summary>
 
-    class TransactionOrder
+    public class TransactionOrder
     {
         // a dictionary that takes objects from the Inventory class as the key and value pair,
         // in this case being the IngredientName and Price
-        // the "string" for item1 in dictionary will represent the key we want to look for, in this case IngredientName
-        public Dictionary<string, Inventory> IngredientDetails { get; set; } = new Dictionary<string, Inventory>();
+        public Dictionary<Inventory, Inventory> IngredientDetails { get; set; } = new Dictionary<Inventory, Inventory>();
 
         public int PizzaId { get; set; }
 
-        private char _size;
+        private string _size;
         private string _topping1;
         private string _topping2;
         private string _topping3;
@@ -32,30 +31,31 @@ namespace PizzaStore.Library
 
         // returns pizza size
         // sets pizza size, must be a valid size choice
-        public char Size
+        public string Size
         {
             get { return _size; }
             set
             {
                 // if the value does not equal these options
-                if (value != 'S' || value != 's' || value != 'M' || value != 'm' || value != 'L' || value != 'l')
+                if (value == "S" || value == "s" || value == "M" || value == "m" || value == "L" || value == "l")
                 {
-                    throw new ArgumentException("Must be a valid size option!", nameof(value));
+                    _size = value;
                 }
                 else
-                    _size = value;
+                    throw new ArgumentException("Must be a valid size option!", nameof(value));
             }
         }
 
+        //these only need to check to see if the naming convention is valid
         public string Topping1
         {
             get { return _topping1; }
             set
             {
-                // if the search key isn't in the dictionary
-                if (!IngredientDetails.ContainsKey(value))
+                // if the ingredient name is empty
+                if (value.Length == 0)
                 {
-                    throw new ArgumentException("This ingredient doesn't exist.", nameof(value));
+                    throw new ArgumentException("This topping name isn't valid.", nameof(value));
                 }
                 else
                     _topping1 = value;
@@ -67,10 +67,10 @@ namespace PizzaStore.Library
             get { return _topping2; }
             set
             {
-                // if the search key isn't in the dictionary
-                if (!IngredientDetails.ContainsKey(value))
+                // if the ingredient name is empty
+                if (value.Length == 0)
                 {
-                    throw new ArgumentException("This ingredient doesn't exist.", nameof(value));
+                    throw new ArgumentException("This topping name isn't valid.", nameof(value));
                 }
                 else
                     _topping2 = value;
@@ -82,10 +82,10 @@ namespace PizzaStore.Library
             get { return _topping3; }
             set
             {
-                // if the search key isn't in the dictionary
-                if (!IngredientDetails.ContainsKey(value))
+                // if the ingredient name is empty
+                if (value.Length == 0)
                 {
-                    throw new ArgumentException("This ingredient doesn't exist.", nameof(value));
+                    throw new ArgumentException("This topping name isn't valid.", nameof(value));
                 }
                 else
                     _topping3 = value;
@@ -97,10 +97,10 @@ namespace PizzaStore.Library
             get { return _topping4; }
             set
             {
-                // if the search key isn't in the dictionary
-                if (!IngredientDetails.ContainsKey(value))
+                // if the ingredient name is empty
+                if (value.Length == 0)
                 {
-                    throw new ArgumentException("This ingredient doesn't exist.", nameof(value));
+                    throw new ArgumentException("This topping name isn't valid.", nameof(value));
                 }
                 else
                     _topping4 = value;
@@ -112,10 +112,10 @@ namespace PizzaStore.Library
             get { return _topping5; }
             set
             {
-                // if the search key isn't in the dictionary
-                if (!IngredientDetails.ContainsKey(value))
+                // if the ingredient name is empty
+                if (value.Length == 0)
                 {
-                    throw new ArgumentException("This ingredient doesn't exist.", nameof(value));
+                    throw new ArgumentException("This topping name isn't valid.", nameof(value));
                 }
                 else
                     _topping5 = value;
@@ -127,7 +127,13 @@ namespace PizzaStore.Library
             get { return _cost; }
             set
             {
-
+                // if the cost is less than 0
+                if (value < 0)
+                {
+                    throw new ArgumentException("Not a valid price.");
+                }
+                else
+                    _cost = value;
             }
         }
     }
