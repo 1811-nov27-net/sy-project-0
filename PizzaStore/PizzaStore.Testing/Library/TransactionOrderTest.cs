@@ -10,7 +10,7 @@ namespace PizzaStore.Testing.Library
 
     public class TransactionOrderTest
     {
-        readonly TransactionOrder transactionOrder = new TransactionOrder();
+        readonly TransactionOrderLib transactionOrder = new TransactionOrderLib();
 
         [Fact]
         public void SizeWithWrongInputShouldReturnError()

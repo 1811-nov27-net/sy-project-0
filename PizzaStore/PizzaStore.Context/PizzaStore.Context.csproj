@@ -12,4 +12,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PizzaStore.Library\PizzaStore.Library.csproj" />
+  </ItemGroup>
+
 </Project>

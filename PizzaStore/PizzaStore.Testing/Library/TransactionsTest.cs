@@ -10,7 +10,7 @@ namespace PizzaStore.Testing.Library
 
     public class TransactionsTest
     {
-        readonly Transactions transactions = new Transactions();
+        readonly TransactionsLib transactions = new TransactionsLib();
 
         [Theory]
         [InlineData(0)]

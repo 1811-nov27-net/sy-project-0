@@ -10,12 +10,19 @@ namespace PizzaStore.Library
     ///         FirstName
     ///         LastName
     /// </summary>
-    public class User
+    public class UserLib
     {
         public int Id { get; set; }
 
         private string _firstName;
         private string _lastName;
+
+        public UserLib(int id, string firstname, string lastname)
+        {
+            Id = id;
+            _firstName = firstname;
+            _lastName = lastname;
+        }
 
         // returns firstname
         // sets firstname, must not be empty

@@ -13,11 +13,11 @@ namespace PizzaStore.Library
     ///     ALL pizza orders must be saved
     /// </summary>
 
-    public class TransactionOrder
+    public class TransactionOrderLib
     {
         // a dictionary that takes objects from the Inventory class as the key and value pair,
         // in this case being the IngredientName and Price
-        public Dictionary<Inventory, Inventory> IngredientDetails { get; set; } = new Dictionary<Inventory, Inventory>();
+        public Dictionary<InventoryLib, InventoryLib> IngredientDetails { get; set; } = new Dictionary<InventoryLib, InventoryLib>();
 
         public int PizzaId { get; set; }
 

@@ -9,9 +9,9 @@ namespace PizzaStore.Testing.Library
     ///     it should pass and fail where it should fail
     /// </summary>
     
-    public class UserTest
+    public class UsersTest
     {
-        readonly User user = new User();
+        readonly UserLib user = new UserLib();
 
         [Theory]
         [InlineData("Jackie")]

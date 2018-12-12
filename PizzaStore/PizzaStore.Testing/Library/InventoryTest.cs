@@ -11,7 +11,7 @@ namespace PizzaStore.Testing.Library
     
     public class InventoryTest
     {
-        readonly Inventory inventory = new Inventory();
+        readonly InventoryLib inventory = new InventoryLib();
 
         [Fact]
         public void IngredientWithNoNameShouldReturnError()

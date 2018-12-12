@@ -11,7 +11,7 @@ namespace PizzaStore.Testing.Library
         ///     pass and fail where they should
         /// </summary>
 
-        readonly Store store = new Store();
+        readonly StoreLib store = new StoreLib();
 
         [Fact]
         public void StoreWithNameShouldSave()

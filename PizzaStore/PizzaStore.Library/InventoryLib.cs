@@ -10,7 +10,7 @@ namespace PizzaStore.Library
     ///      to access data in Inventory from TransactionOrder
     /// </summary>
     
-    public class Inventory
+    public class InventoryLib
     {
         private string _ingredientName;
         private int _price;

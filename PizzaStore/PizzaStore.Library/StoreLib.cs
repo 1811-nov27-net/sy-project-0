@@ -10,13 +10,18 @@ namespace PizzaStore.Library
     ///         is because we are simply just reducing the count
     ///         whenever an ingredient is used)
     /// </summary>
-    public class Store
+    public class StoreLib
     {
         // needs store name
         // needs a set stock of ingredients
 
         private string _name;
         private int _stock;
+
+        public StoreLib(string name)
+        {
+            _name = name;
+        }
 
         // returns a name when requested
         // sets a name, however throws an error if the string is empty

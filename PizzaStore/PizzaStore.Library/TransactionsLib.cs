@@ -15,7 +15,7 @@ namespace PizzaStore.Library
     ///     it is datetime2)
     /// </summary>
 
-    public class Transactions
+    public class TransactionsLib
     {
         public int _orderId { get; set; }
         public DateTime _orderTime { get; set; }
@@ -23,6 +23,14 @@ namespace PizzaStore.Library
         private int _pizzaId;
         private int _userId;
         private string _storeName;
+
+        public TransactionsLib(int orderid, int pizzaid, int userid, string storename)
+        {
+            _orderId = orderid;
+            _pizzaId = pizzaid;
+            _userId = userid;
+            _storeName = storename;
+        }
 
         public int PizzaId
         {

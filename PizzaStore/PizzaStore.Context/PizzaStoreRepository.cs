@@ -6,76 +6,135 @@ using System.Linq;
 
 namespace PizzaStore.Context
 {
+    /// <summary>
+    ///     This repository's purpose is to manage data access across User, Store,
+    ///     Transactions, TransactionOrder, and Inventory
+    /// </summary>
     public class PizzaStoreRepository : IPizzaStoreRepository
     {
-        public void AddOrder(Library.Transactions transaction)
+        private readonly PizzaDBContext _db;
+
+        // initialize new pizza store repository
+        public PizzaStoreRepository(PizzaDBContext db)
+        {
+            _db = db ?? throw new ArgumentNullException(nameof(db));
+        }
+
+        public void AddOrder(Library.TransactionsLib transaction)
         {
             throw new NotImplementedException();
         }
 
-        public void AddPizza(Library.TransactionOrder order)
+        public void AddPizza(Library.TransactionOrderLib order)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRepeatOrder(Library.Transactions transaction)
+        public void AddRepeatOrder(Library.TransactionsLib transaction)
         {
             throw new NotImplementedException();
         }
 
-        public void AddStore(Library.Store store)
+        public void AddStore(Library.StoreLib store)
         {
             throw new NotImplementedException();
         }
 
-        public void AddUser(User user)
+        public void AddUser(Library.UserLib user)
         {
             throw new NotImplementedException();
         }
 
-        public void CheckStoreStock(Library.Store store)
+        public bool CheckUser(UserLib user)
+        {
+            // if there are no users with the provided first and last name
+            if (_db.Users.Where(u => u.FirstName == user.FirstName && u.LastName == user.LastName).ToList().Count == 0)
+            {
+                return false;
+            }
+            else
+                return true; // if there is a match
+        }
+
+        public void CheckStoreStock(Library.StoreLib store)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteUser(User userid)
+        public void DeleteUser(Library.UserLib userid)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Library.Transactions> GetCheapestTransactions()
+        public IEnumerable<Library.TransactionsLib> GetCheapestTransactions()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Library.Transactions> GetEarliestTransactions()
+        public IEnumerable<Library.TransactionsLib> GetEarliestTransactions()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Library.Transactions> GetLatestTransactions()
+        public IEnumerable<Library.TransactionsLib> GetLatestTransactions()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Library.Transactions> GetMostExpensiveTransactions()
+        public IEnumerable<Library.TransactionsLib> GetMostExpensiveTransactions()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Library.Transactions> GetTransactions()
+        public IEnumerable<Library.TransactionsLib> GetTransactions()
         {
-            throw new NotImplementedException();
+            IList<TransactionsLib> transactions = new List<TransactionsLib>();
+            foreach (var transaction in _db.Transactions.ToList())
+            {
+                transactions.Add(CreateTransactionFromDB(transaction));
+            }
+            return transactions;
         }
 
-        public IEnumerable<User> GetUsers()
+        private TransactionsLib CreateTransactionFromDB(Transactions transaction)
         {
-            throw new NotImplementedException();
+            return new TransactionsLib(transaction.OrderId, transaction.PizzaId, transaction.UserId, transaction.StoreName);
         }
 
+        public IEnumerable<Library.UserLib> GetUsers()
+        {
+            IList<UserLib> user = new List<UserLib>();
+            foreach (var person in _db.Users.ToList())
+            {
+                user.Add(CreateUserFromDB(person));
+            }
+            return user;
+        }
+
+        private UserLib CreateUserFromDB(Users person)
+        {
+            return new UserLib(person.Id, person.FirstName, person.LastName);
+        }
+
+        public IEnumerable<StoreLib> GetStores()
+        {
+            IList<StoreLib> stores = new List<StoreLib>();
+            foreach (var store in _db.Store.ToList())
+            {
+                stores.Add(CreateStoreFromDB(store));
+            }
+            return stores;
+        }
+
+        private StoreLib CreateStoreFromDB(Store store)
+        {
+            return new StoreLib(store.Name);
+        }
+
+        // saves data to source
         public void Save()
         {
-            throw new NotImplementedException();
+            _db.SaveChanges();
         }
     }
 }
