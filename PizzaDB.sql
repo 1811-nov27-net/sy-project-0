@@ -26,8 +26,11 @@ CREATE TABLE Pizza.Inventory
 (
 	-- no numerical ID since each ingredient is unique in itself
 	IngredientName NVARCHAR(100) NOT NULL PRIMARY KEY, -- '' (empty) represents no topping, has 0 cost
-	Price Money
+	Price Money NULL
 );
+
+-- sets price column from NULL to NOT NULL
+ALTER TABLE Pizza.Inventory ALTER COLUMN Price MONEY NOT NULL;
 
 -- need to change to accommodate pizza order (maybe)
 CREATE TABLE Pizza.TransactionOrder
@@ -54,6 +57,9 @@ CREATE TABLE Pizza.Store
 	-- ingredient name and price
 	Stock INT NULL
 );
+
+-- change stock from null to not null
+ALTER TABLE Pizza.Store ALTER COLUMN Stock INTEGER NOT NULL;
 
 -- need to change, as one transaction can have a max of 12 pizzas
 -- this method, (PizzaId) allows for multiple pizza id's for the same OrderId

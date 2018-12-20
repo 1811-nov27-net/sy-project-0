@@ -19,6 +19,18 @@ namespace PizzaStore.Library
         // in this case being the IngredientName and Price
         public Dictionary<InventoryLib, InventoryLib> IngredientDetails { get; set; } = new Dictionary<InventoryLib, InventoryLib>();
 
+        public TransactionOrderLib(int pizzaid, string size, string topping1, string topping2, string topping3, string topping4, string topping5, decimal cost)
+        {
+            PizzaId = pizzaid;
+            _size = size;
+            _topping1 = topping1;
+            _topping2 = topping2;
+            _topping3 = topping3;
+            _topping4 = topping4;
+            _topping5 = topping5;
+            _cost = cost;
+        }
+
         public int PizzaId { get; set; }
 
         private string _size;
@@ -27,7 +39,7 @@ namespace PizzaStore.Library
         private string _topping3;
         private string _topping4;
         private string _topping5;
-        private double _cost;
+        private decimal _cost;
 
         // returns pizza size
         // sets pizza size, must be a valid size choice
@@ -122,7 +134,7 @@ namespace PizzaStore.Library
             }
         }
 
-        public double Cost
+        public decimal Cost
         {
             get { return _cost; }
             set

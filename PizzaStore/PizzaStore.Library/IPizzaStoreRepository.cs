@@ -41,11 +41,17 @@ namespace PizzaStore.Library
         // new order
         void AddOrder(TransactionsLib transaction);
 
+        // display order info
+        IEnumerable<TransactionOrderLib> GetTransactionOrders();
+
         // output list of stores
         IEnumerable<StoreLib> GetStores();
 
         // add a store
         void AddStore(StoreLib store);
+
+        // check if store exists
+        bool CheckStore(StoreLib store);
 
         // create pizza
         void AddPizza(TransactionOrderLib order);
@@ -53,7 +59,7 @@ namespace PizzaStore.Library
         // check store inventory for appropriate stock amount
         // if valid, saves order to DB and prints out order to user
         // if invalid, will prompt user to choose another store or create a store
-        void CheckStoreStock(StoreLib store);
+        IEnumerable<InventoryLib> GetInventory();
 
         // saves data to database source
         void Save();

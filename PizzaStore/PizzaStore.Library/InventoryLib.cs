@@ -13,7 +13,13 @@ namespace PizzaStore.Library
     public class InventoryLib
     {
         private string _ingredientName;
-        private int _price;
+        private decimal _price;
+
+        public InventoryLib(string name, decimal price)
+        {
+            _ingredientName = name;
+            _price = price;
+        }
 
         // returns ingredient name
         // sets ingredient name, must not be empty
@@ -33,7 +39,7 @@ namespace PizzaStore.Library
 
         // returns ingredient cost
         // sets ingredient cost, must be a valid integer equal to 0 or above
-        public int Price
+        public decimal Price
         {
             get { return _price; }
             set

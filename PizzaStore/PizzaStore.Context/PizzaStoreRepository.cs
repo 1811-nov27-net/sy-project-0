@@ -27,7 +27,14 @@ namespace PizzaStore.Context
 
         public void AddPizza(Library.TransactionOrderLib order)
         {
-            throw new NotImplementedException();
+            TransactionOrder transactionOrder = new TransactionOrder();
+            transactionOrder.Size = order.Size;
+            transactionOrder.Topping1 = order.Topping1;
+            transactionOrder.Topping2 = order.Topping2;
+            transactionOrder.Topping3 = order.Topping3;
+            transactionOrder.Topping4 = order.Topping4;
+            transactionOrder.Topping5 = order.Topping5;
+            transactionOrder.Cost = order.Cost;
         }
 
         public void AddRepeatOrder(Library.TransactionsLib transaction)
@@ -37,12 +44,27 @@ namespace PizzaStore.Context
 
         public void AddStore(Library.StoreLib store)
         {
-            throw new NotImplementedException();
+            Store newStore = new Store();
+            newStore.Name = store.Name;
+            newStore.Stock = store.Stock;
+        }
+
+        public bool CheckStore(Library.StoreLib store)
+        {
+            if (_db.Store.Where(s => s.Name == store.Name).ToList().Count == 0)
+            {
+                return false;
+            }
+            else
+                return true;
         }
 
         public void AddUser(Library.UserLib user)
         {
-            throw new NotImplementedException();
+            Users newUser = new Users();
+            newUser.FirstName = user.FirstName;
+            newUser.LastName = user.LastName;
+            _db.Add(newUser);
         }
 
         public bool CheckUser(UserLib user)
@@ -56,9 +78,19 @@ namespace PizzaStore.Context
                 return true; // if there is a match
         }
 
-        public void CheckStoreStock(Library.StoreLib store)
+        public IEnumerable<Library.InventoryLib> GetInventory()
         {
-            throw new NotImplementedException();
+            IList<InventoryLib> inventory = new List<InventoryLib>();
+            foreach (var ingredient in _db.Inventory.ToList())
+            {
+                inventory.Add(CreateInventoryFromDB(ingredient));
+            }
+            return inventory;
+        }
+
+        private InventoryLib CreateInventoryFromDB(Inventory inventory)
+        {
+            return new InventoryLib(inventory.IngredientName, inventory.Price);
         }
 
         public void DeleteUser(Library.UserLib userid)
@@ -84,6 +116,22 @@ namespace PizzaStore.Context
         public IEnumerable<Library.TransactionsLib> GetMostExpensiveTransactions()
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<TransactionOrderLib> GetTransactionOrders()
+        {
+            IList<TransactionOrderLib> orders = new List<TransactionOrderLib>();
+            foreach (var order in _db.TransactionOrder.ToList())
+            {
+                orders.Add(CreateTransactionOrderFromDB(order));
+            }
+            return orders;
+        }
+
+        private TransactionOrderLib CreateTransactionOrderFromDB(TransactionOrder order)
+        {
+            return new TransactionOrderLib(order.PizzaId, order.Size, order.Topping1, order.Topping2,
+                order.Topping3, order.Topping4, order.Topping5, order.Cost);
         }
 
         public IEnumerable<Library.TransactionsLib> GetTransactions()
@@ -128,7 +176,7 @@ namespace PizzaStore.Context
 
         private StoreLib CreateStoreFromDB(Store store)
         {
-            return new StoreLib(store.Name);
+            return new StoreLib(store.Name, store.Stock);
         }
 
         // saves data to source

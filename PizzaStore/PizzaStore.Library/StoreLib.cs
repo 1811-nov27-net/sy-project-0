@@ -18,9 +18,10 @@ namespace PizzaStore.Library
         private string _name;
         private int _stock;
 
-        public StoreLib(string name)
+        public StoreLib(string name, int stock)
         {
             _name = name;
+            _stock = stock;
         }
 
         // returns a name when requested

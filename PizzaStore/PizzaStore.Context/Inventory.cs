@@ -15,7 +15,7 @@ namespace PizzaStore.Context
         }
 
         public string IngredientName { get; set; }
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         public virtual ICollection<TransactionOrder> TransactionOrderTopping1Navigation { get; set; }
         public virtual ICollection<TransactionOrder> TransactionOrderTopping2Navigation { get; set; }

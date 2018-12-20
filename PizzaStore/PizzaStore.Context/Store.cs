@@ -12,7 +12,7 @@ namespace PizzaStore.Context
 
         public string Name { get; set; }
         public int? OrderId { get; set; }
-        public int? Stock { get; set; }
+        public int Stock { get; set; }
 
         public virtual TransactionOrder Order { get; set; }
         public virtual ICollection<Transactions> Transactions { get; set; }
